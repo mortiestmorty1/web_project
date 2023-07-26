@@ -1,16 +1,16 @@
-const user = require('../models/user');
+const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const product = require('../models/product');
 
 let signup = (req, res ) =>{
     console.log("signup usercontroller called!");
-    user.findOne({email: req.body.email})
+    User.findOne({email: req.body.email})
     .then((existingUser)=>{
         if(existingUser)
         {
             return res.status(400).send({message:"user account with this email already exists!"});
         }
-        let user = new user({
+        let newUser = new User({
             name: req.body.name,
             address: req.body.address,
             phoneNumber: req.body.phoneNumber,
@@ -18,7 +18,7 @@ let signup = (req, res ) =>{
             password: req.body.password,
         })
 
-        user.save()
+        newUser.save()
         .then((user) => {
             res.status(200).send({message: "user Account created successfully!", user: user})
         })
@@ -34,11 +34,11 @@ let login = (req, res) => {
     let email = req.body.email
     let password = req.body.password
     let secretKey = process.env.SECRET_KEY
-    user.findOne({email: email})
+    User.findOne({email: email})
     .then((user) => {
-        if (user)
+        if (User)
         {
-            if (user.password === password)
+            if (User.password === password)
             {
                 let token = jwt.sign({email: email, role: 'user'}, secretKey, {expiresIn: '1h'}) //the email is now included in the token as well as the role since login is successful
                 res.status(200).send({message: "Login Successful", token: token}) 

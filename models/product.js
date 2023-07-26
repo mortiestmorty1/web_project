@@ -1,6 +1,10 @@
 const mongoose= require('mongoose');
 
 const productSchema=new mongoose.Schema({
+    id:{
+        type: Number,
+        required: true
+    },
     title:{
         type: String,
         required: true
@@ -20,6 +24,10 @@ const productSchema=new mongoose.Schema({
     size:{
         type: String,
         required : false
+    },
+    Image:{
+        type:Buffer,
+        required: false
     }
 })
 
